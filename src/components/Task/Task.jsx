@@ -75,14 +75,12 @@ Task.defaultProps = {
 };
 
 Task.propTypes = {
-	task: PropTypes.object(
-		PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			title: PropTypes.string.isRequired,
-			completed: PropTypes.bool.isRequired,
-			created: PropTypes.string.isRequired,
-		})
-	),
+	task: PropTypes.shape({
+	id: PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	completed: PropTypes.bool.isRequired,
+	created: PropTypes.string.isRequired,
+	}).isRequired,
 	onToggle: PropTypes.func,
 	onDelete: PropTypes.func,
 	onUpdate: PropTypes.func,
