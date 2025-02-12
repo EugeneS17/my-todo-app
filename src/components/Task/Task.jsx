@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./Task.css";
-import { formatDate } from "../../date-fns";
+import { formatDate } from "../../services/utils";
 
 export function Task({ task, onToggle, onDelete, onUpdate }) {
 	const [isEditing, setIsEditing] = useState(false);
@@ -36,8 +36,9 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
 					type="checkbox"
 					checked={task.completed}
 					onChange={handleToggle}
+					id={`toggle-${task.id}`}
 				/>
-				<label>
+				<label htmlFor={`toggle-${task.id}`}>
 					<span className="description">{task.title}</span>
 					<span className="created">{formatDate(task.created)}</span>
 				</label>
@@ -68,7 +69,6 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
 }
 
 Task.defaultProps = {
-	task: {},
 	onToggle: () => {},
 	onDelete: () => {},
 	onUpdate: () => {},
