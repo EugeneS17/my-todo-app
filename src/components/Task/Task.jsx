@@ -11,10 +11,14 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
   const [statusClassName, setStatusClassName] = useState(task.completed ? 'completed' : null)
   const [title, setTitle] = useState(task.title)
 
-  const datesToDiff = task.isActive ? [new Date(), task.deadline] : [task.updated, task.deadline]
+  const datesToDiff = task.isActive ? [Date.now(), task.deadline] : [task.updated, task.deadline]
   const time = diffBetweenDates(...datesToDiff)
 
-  const { minutesLeft, secondsLeft, resetTimer } = useTimer(time, task.deadline, task.isActive)
+  function setInactive() {
+    onUpdate(task.id, task.title, task.deadline, false)
+  }
+
+  const { minutesLeft, secondsLeft, resetTimer } = useTimer(time, task.deadline, task.isActive, setInactive)
 
   const handleEscape = useCallback(() => {
     if (isEditing) {
@@ -42,7 +46,7 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
   function handlePlay() {
     if (task.isActive || task.completed) return
     const convertedTime = (minutesLeft * 60 + secondsLeft) * 1000
-    const newDeadline = new Date(Date.now() + convertedTime + 50)
+    const newDeadline = Date.now() + convertedTime
     onUpdate(task.id, title, newDeadline, true)
   }
 
@@ -71,6 +75,7 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
         <label htmlFor={`toggle-${task.id}`}>
           <span className="title">{task.title}</span>
           <Timer
+            isActive={task.isActive}
             minutesLeft={minutesLeft}
             secondsLeft={secondsLeft}
             onPlay={() => handlePlay()}
@@ -102,9 +107,9 @@ Task.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
-    created: PropTypes.string.isRequired,
-    updated: PropTypes.instanceOf(Date).isRequired,
-    deadline: PropTypes.instanceOf(Date).isRequired,
+    created: PropTypes.number.isRequired,
+    updated: PropTypes.number.isRequired,
+    deadline: PropTypes.number.isRequired,
     isActive: PropTypes.bool.isRequired,
   }).isRequired,
   onToggle: PropTypes.func,

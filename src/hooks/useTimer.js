@@ -1,36 +1,40 @@
 import { useCallback, useEffect, useState } from 'react'
 import { diffBetweenDates } from '../services/utils'
 
-export default function useTimer([minutes, seconds], expirationDate, activeStatus) {
+export default function useTimer([minutes, seconds], expirationDate, activeStatus, setInactive) {
   const [minutesLeft, setMinutesLeft] = useState(minutes)
   const [secondsLeft, setSecondsLeft] = useState(seconds)
 
   const updateTimer = useCallback(
     (timerId) => {
-      if (expirationDate < Date.now() || !activeStatus) {
+      const now = Date.now()
+      if (expirationDate + 500 < now || !activeStatus) {
         clearInterval(timerId)
+        setInactive()
         return
       }
 
-      const [m, s] = diffBetweenDates(Date.now(), expirationDate)
+      const [m, s] = diffBetweenDates(now, expirationDate)
       setMinutesLeft(m)
       setSecondsLeft(s)
     },
-    [expirationDate, activeStatus]
+    [expirationDate, activeStatus, setInactive]
   )
-
   function resetTimer() {
     setMinutesLeft(0)
     setSecondsLeft(0)
   }
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      updateTimer(timer)
-    }, 1000)
+    let timer
+    if (activeStatus) {
+      timer = setInterval(() => {
+        updateTimer(timer)
+      }, 1000)
+    }
 
     return () => clearInterval(timer)
-  }, [updateTimer])
+  }, [updateTimer, activeStatus])
 
   return { minutesLeft, secondsLeft, resetTimer }
 }
