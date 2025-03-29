@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import './Task.css'
 import { diffBetweenDates, formatDate } from '../../services/utils'
 import { useTimer, useEscapeHandler, useClickOutside } from '../../hooks/index'
+import Timer from '../Timer/Timer'
 
 export function Task({ task, onToggle, onDelete, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -69,21 +70,13 @@ export function Task({ task, onToggle, onDelete, onUpdate }) {
         />
         <label htmlFor={`toggle-${task.id}`}>
           <span className="title">{task.title}</span>
-          <span className="description description--timer">
-            <button
-              type="button"
-              className="icon icon-play"
-              onClick={handlePlay}
-              disabled={!minutesLeft && !secondsLeft}
-            />
-            <button
-              type="button"
-              className="icon icon-pause"
-              onClick={handlePause}
-              disabled={!minutesLeft && !secondsLeft}
-            />
-            {`${minutesLeft}:${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}`}
-          </span>
+          <Timer
+            minutesLeft={minutesLeft}
+            secondsLeft={secondsLeft}
+            onPlay={() => handlePlay()}
+            onPause={() => handlePause()}
+            className="description description--timer"
+          />
           <span className="description">{formatDate(task.created)}</span>
         </label>
         <button className={`icon ${!task.completed ? 'icon-edit' : 'icon-edit--not-allowed'}`} onClick={handleEdit} />
