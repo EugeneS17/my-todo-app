@@ -7,7 +7,10 @@ export default function tasksReducer(tasks = [], action) {
           id: Date.now(),
           title: action.title,
           completed: false,
-          created: new Date(),
+          created: Date.now(),
+          updated: Date.now(),
+          deadline: action.deadline,
+          isActive: false,
         },
       ]
     }
@@ -17,7 +20,7 @@ export default function tasksReducer(tasks = [], action) {
     case 'toggled': {
       return tasks.map((task) => {
         if (task.id === action.id) {
-          return { ...task, completed: !task.completed }
+          return { ...task, completed: !task.completed, updated: Date.now(), deadline: Date.now(), isActive: false }
         }
         return task
       })
@@ -28,6 +31,9 @@ export default function tasksReducer(tasks = [], action) {
           return {
             ...task,
             title: action.title,
+            updated: Date.now(),
+            deadline: action.deadline,
+            isActive: action.isActive,
           }
         }
         return task
