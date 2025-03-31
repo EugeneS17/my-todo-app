@@ -2,8 +2,14 @@ export default function Timer({ isActive, minutesLeft, secondsLeft, onPlay, onPa
   const isDisabled = !minutesLeft && !secondsLeft
   return (
     <span className={className}>
-      <button type="button" className="icon icon-play" onClick={onPlay} disabled={isDisabled || isActive} />
-      <button type="button" className="icon icon-pause" onClick={onPause} disabled={isDisabled || !isActive} />
+      {!isDisabled && (
+        <button
+          type="button"
+          className={`icon icon-${isActive ? 'pause' : 'play'}`}
+          onClick={isActive ? onPause : onPlay}
+          disabled={isDisabled}
+        />
+      )}
       {`${minutesLeft}:${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}`}
     </span>
   )
