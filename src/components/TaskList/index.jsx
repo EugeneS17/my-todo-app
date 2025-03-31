@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import { Task } from '../Task/Task'
+import { Task } from '../Task'
 import './TaskList.css'
 
 export function TaskList({ tasks, ...props }) {

@@ -2,31 +2,35 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import './NewTaskForm.css'
 
-export default function NewTaskForm({ onAddTask, min, sec }) {
+export default function NewTaskForm({ onAddTask = () => {}, min = 0, sec = 0 }) {
   const [title, setTitle] = useState('')
   const [minutes, setMinutes] = useState(min)
   const [seconds, setSeconds] = useState(sec)
 
   const timer = minutes * 60 + seconds
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (!title) return
+    if (!title.trim()) return
+
     const deadline = Date.now() + timer * 1000
     onAddTask(title.trim(), deadline)
     setTitle('')
     setMinutes(min)
     setSeconds(sec)
   }
-  function handleMinutes(value) {
-    if (Number.isNaN(value) || value > 43200) return
-    setMinutes(value)
+
+  const handleMinutes = (value) => {
+    const numValue = Number(value)
+    if (isNaN(numValue) || numValue > 43200 || numValue < 0) return
+    setMinutes(numValue)
   }
 
-  function handleSeconds(value) {
-    if (Number.isNaN(value) || value > 59) return
-    setSeconds(value)
+  const handleSeconds = (value) => {
+    const numValue = Number(value)
+    if (isNaN(numValue) || numValue > 59 || numValue < 0) return
+    setSeconds(numValue)
   }
 
   return (
@@ -38,30 +42,31 @@ export default function NewTaskForm({ onAddTask, min, sec }) {
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        aria-label="Task description"
       />
       <input
-        type="text"
+        type="number"
         className="new-todo-form__timer"
         placeholder="Min"
         value={minutes}
-        onChange={(e) => handleMinutes(+e.target.value)}
+        onChange={(e) => handleMinutes(e.target.value)}
+        min="0"
+        max="43200"
+        aria-label="Minutes"
       />
       <input
-        type="text"
+        type="number"
         className="new-todo-form__timer"
         placeholder="Sec"
         value={seconds}
-        onChange={(e) => handleSeconds(+e.target.value)}
+        onChange={(e) => handleSeconds(e.target.value)}
+        min="0"
+        max="59"
+        aria-label="Seconds"
       />
-      <button type="submit" />
+      <button type="submit" aria-label="Add task" className="visually-hidden" />
     </form>
   )
-}
-
-NewTaskForm.defaultProps = {
-  onAddTask: () => {},
-  min: 0,
-  sec: 0,
 }
 
 NewTaskForm.propTypes = {

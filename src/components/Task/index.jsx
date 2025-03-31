@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import './Task.css'
 import { diffBetweenDates, formatDate } from '../../services/utils'
 import { useTimer, useEscapeHandler, useClickOutside } from '../../hooks/index'
-import Timer from '../Timer/Timer'
+import Timer from '../Timer'
 
 export function Task({ task, onToggle, onDelete, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false)

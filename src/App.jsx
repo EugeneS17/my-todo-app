@@ -1,11 +1,11 @@
 import { useReducer, useState } from 'react'
 
 import './App.css'
-import NewTaskForm from './components/NewTaskForm/NewTaskForm'
-import { TaskList } from './components/TaskList/TaskList'
-import { Footer } from './components/Footer/Footer'
-import { TasksFilter } from './components/TasksFilter/TasksFilter'
-import { Header } from './components/Header/Header'
+import NewTaskForm from './components/NewTaskForm'
+import { TaskList } from './components/TaskList'
+import { Footer } from './components/Footer'
+import { TasksFilter } from './components/TasksFilter'
+import { Header } from './components/Header'
 import tasksReducer from './services/reducers/tasksReducer'
 
 function App() {
